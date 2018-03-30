@@ -1,0 +1,62 @@
+
+################################################################################
+
+library(jsonlite)
+setwd("/Users/rjweise/Documents/HockeyAbstract/data/highway")
+
+#looping through all game in the season
+mainshotsfile <- NULL
+gamenumber <- 0
+for(i in 1:1100) {
+  g <- nchar(i)
+  if(g==1) {
+    nr <- paste0("000", i)
+  } else if (g==2) {
+    nr <- paste0("00", i)
+  } else if (g==3) {
+    nr <- paste0("0", i)
+  } else nr <- paste0("", i)
+  
+  gamenumber <- paste("game201702", nr, sep = "")
+  #gamelist <- paste("L", gamenumber, sep = "")
+  gamelinknumber <- paste("201702", nr, sep = "")
+  gamelink <- paste("http://statsapi.web.nhl.com/api/v1/game/",gamelinknumber,"/feed/live", sep="")
+  
+  #assign(gamefile0, fromJSON(gamelink, flatten = TRUE))
+  gamefile0 <- fromJSON(gamelink, flatten = TRUE)
+           
+  if(NROW(gamefile0) != 0) {
+  #strip all plays form the gamefile
+  gamefile1 <- gamefile0$liveData$plays$allPlays
+  #flatten the gamefile
+  if(NROW(gamefile1) != 0) {
+  gamefile2 <- flatten(gamefile1, recursive = TRUE)
+  #tranpose the gamefile back and forth
+  gamefile3 <- t(gamefile2)
+  gamefile4 <- t(gamefile3)
+  
+  #print(gamelinknumber)
+  #print(NROW(gamefile4))
+  
+  #pump <- matrix(c(gamenumber, nrow = nrow(gamefile4)))
+  #cbind(gamefile4, pump)
+  
+
+  
+  if (i==1) {  
+  mainshotsfile <- gamefile4
+  }
+  else {
+    mainshotsfile <- rbind(mainshotsfile, gamefile4)
+  #gamefile1 <- NULL
+  #gamefile2 <- NULL
+  #gamefile3 <- NULL
+  #gamefile4 <- NULL
+  }
+  }}
+  }
+  
+#write the file to csv (with write.csv2 so ; is used as seperators)
+write.csv2(mainshotsfile, file = "20172018_1-1100.csv", quote = FALSE)
+
+
