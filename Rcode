@@ -47,7 +47,8 @@ for(i in 1:1100) {
   mainshotsfile <- gamefile4
   }
   else {
-    mainshotsfile <- rbind(mainshotsfile, gamefile4)
+    tryCatch(mainshotsfile <- rbind(mainshotsfile, gamefile4)
+             , error = function(e) print(gamenumber))
   #gamefile1 <- NULL
   #gamefile2 <- NULL
   #gamefile3 <- NULL
