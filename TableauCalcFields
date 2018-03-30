@@ -1,0 +1,25 @@
+Make sure to split the Player field: Custom split '),'
+
+#Goalie scored on
+IF [Result.Event] = "Goal" THEN
+    IF CONTAINS([Players - Split 1], '"Scorer", "Assist", "Assist", "Goalie"') THEN
+    MID([Players - Split 4], FINDNTH([Players - Split 4], ",",3)+2)
+    ELSEIF CONTAINS([Players - Split 1], '"Scorer", "Assist", "Goalie"') THEN
+    MID([Players - Split 4], FINDNTH([Players - Split 4], ",",2)+2)
+    ELSEIF CONTAINS([Players - Split 1], '"Scorer", "Goalie"') THEN
+    MID([Players - Split 4], FINDNTH([Players - Split 4], ",",1)+2)
+    ELSE "Missing"
+    END
+END
+
+
+#Saved by <goalie>
+IF [Result.Event] = "Shot" THEN 
+    MID([Result.Description], FIND([Result.Description], "saved by ")+9)
+END
+
+#Goalie of interest
+IF [Result.Event] = "Goal" THEN REPLACE([Goalie scored on], '"','')
+ELSEIF [Result.Event] = "Shot" THEN [Saved by <Goalie>]
+ELSE "-"
+END
