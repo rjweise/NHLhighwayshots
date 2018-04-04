@@ -13,3 +13,4 @@ REQUIRED
 NICE TO HAVE
 - strength
 - date, game period and time
+- shot and goal data from different source to have an idea how complete the data is from NHL API. I noticed some shots / goals are missing x/y locations, or missing the Goalie on Ice.
